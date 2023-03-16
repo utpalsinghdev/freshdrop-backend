@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 
 export const generateOtp = async (number: string) => {
-    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otp = Math.floor(1000 + Math.random() * 9000);
     const otpData = await checknumber(number);
     if (otpData) {
         const otpData = await UpdateOtp(number, otp.toString());
