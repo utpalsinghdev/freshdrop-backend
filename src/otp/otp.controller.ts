@@ -32,6 +32,7 @@ export const verifyOtpController = async (req: Request, res: Response) => {
             const user = await CreateUser(InputBody.number);
             res.status(201).json({ message: 'Thanks for joining', token, user });
         } else {
+
             res.status(200).json({ message: 'Welcome back', token, user });
         }
 
