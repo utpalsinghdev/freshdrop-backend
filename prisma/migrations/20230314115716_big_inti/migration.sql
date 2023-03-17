@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Otp" ALTER COLUMN "number" SET DATA TYPE BIGINT;

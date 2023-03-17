@@ -22,3 +22,38 @@ export const checkUser = async (number: string) => {
     });
     return user;
 }
+interface UserInput {
+    number: string;
+    name: string;
+    address: string;
+}
+
+
+
+export const getProfile = async (number: string) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            number,
+        },
+        include: {
+            orders: true,
+        },
+    })
+
+    return user
+}
+
+export const profile = async (userInput: UserInput) => {
+    const { number, name, address } = userInput
+    const user = await prisma.user.update({
+        where: {
+            number,
+        },
+        data: {
+            name,
+            address,
+        },
+    })
+
+    return user
+}

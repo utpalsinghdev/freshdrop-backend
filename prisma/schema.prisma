@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,31 +16,57 @@ model Otp {
 }
 
 model User {
-  id     Int     @id @default(autoincrement())
-  name   String  @default("customer")
-  number String  @unique
-  orders Order[]
-  address   Address[]
+  id        Int      @id @default(autoincrement())
+  name      String   @default("customer")
+  number    String   @unique
+  orders    Order[]  @relation("userOrders")
+  bottles   Int?
+  balance   Int      @default(0)
+  address   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum OrderType {
+  SINGLE
+  MEMBERSHIPED
+}
+
+enum TimeSlot {
+  MORNING
+  AFTERNOON
+  EVENING
+}
+
+enum EmployeeRole {
+  DELIVERY
+  ADMIN
+  SUPERADMIN
+}
+
+model Employee {
+  Employee_id Int          @id @default(autoincrement())
+  name        String
+  number      String       @unique
+  role        EmployeeRole
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  orders      Order[]      @relation("employeeOrders")
 }
 
 model Order {
-  id        Int      @id @default(autoincrement())
-  number    String   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  address   String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-}
-
-model Address {
-  id        Int      @id @default(autoincrement())
-  address   String
-  number    String   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  Order_id     Int       @id @default(autoincrement())
+  number       String
+  address      String
+  deliveryDate DateTime
+  quantity     Int
+  deliveryTime TimeSlot 
+  type         OrderType @default(SINGLE)
+  status       String    @default("pending")
+  user         User      @relation("userOrders", fields: [userId], references: [id])
+  userId       Int
+  AuthorBy     Employee? @relation("employeeOrders", fields: [AuthorBy_id], references: [Employee_id])
+  AuthorBy_id  Int?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
