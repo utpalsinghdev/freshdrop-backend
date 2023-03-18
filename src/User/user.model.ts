@@ -27,6 +27,9 @@ interface UserInput {
     name: string;
     address: string;
 }
+interface UserInclude {
+    orders?: boolean | Record<string, any>;
+}
 
 
 
@@ -37,11 +40,11 @@ export const getProfile = async (number: string) => {
         },
         include: {
             orders: true,
-        },
-    })
+        } as UserInclude,
+    });
 
-    return user
-}
+    return user;
+};
 
 export const profile = async (userInput: UserInput) => {
     const { number, name, address } = userInput

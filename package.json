@@ -1,7 +1,7 @@
 {
-  "name": "twitter-backend",
+  "name": "freshdrop-backend",
   "version": "1.0.0",
-  "description": "backend clone of twitter ",
+  "description": "freshdrop private limited",
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon ./src/server.ts",

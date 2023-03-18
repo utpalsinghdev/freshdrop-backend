@@ -16,15 +16,16 @@ model Otp {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @default("customer")
-  number    String   @unique
-  orders    Order[]  @relation("userOrders")
-  bottles   Int?
-  balance   Int      @default(0)
-  address   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String   @default("customer")
+  number      String   @unique
+  orders      Order[]  @relation("userOrders")
+  bottles     Int?
+  balance     Int      @default(0)
+  address     String?
+  membership Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 enum OrderType {
@@ -60,7 +61,7 @@ model Order {
   address      String
   deliveryDate DateTime
   quantity     Int
-  deliveryTime TimeSlot 
+  deliveryTime TimeSlot
   type         OrderType @default(SINGLE)
   status       String    @default("pending")
   user         User      @relation("userOrders", fields: [userId], references: [id])

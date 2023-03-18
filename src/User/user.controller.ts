@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import {
-    GetUser,
     GetProfile,
     Profile
 } from './user.services';
@@ -41,7 +40,7 @@ export const updateDetailsController = async (req: AuthenticatedRequest, res: Re
             number
         }
         const user = await Profile(userInput);
-        res.status(200).json({ message: 'User updated successfully', user });
+        res.status(200).json({ message: 'Profile Updated successfully', user });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
