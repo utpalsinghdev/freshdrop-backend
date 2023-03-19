@@ -31,7 +31,7 @@ export const updateDetailsController = async (req: AuthenticatedRequest, res: Re
     try {
         const { error } = profileSchema.validate(req.body);
         if (error) {
-            throw new Error(error.message);
+            res.status(400).json({ message: error.message });
         }
         const number = (req as AuthenticatedRequest).number;
         const userInput: User = {

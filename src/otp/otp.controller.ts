@@ -20,7 +20,7 @@ export const verifyOtpController = async (req: Request, res: Response) => {
         const InputBody = req.body;
         const { error } = otpSchema.validate(InputBody);
         if (error) {
-            throw new Error(error.message);
+            res.status(400).json({ message: error.message });
         }
         const token = await verifyOtp(InputBody.number, InputBody.otp);
         if (!token) {

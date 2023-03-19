@@ -8,7 +8,7 @@ export const CreateEmployee = async (req: Request, res: Response): Promise<void>
     try {
         const { error } = employeeSchema.validate(req.body);
         if (error) {
-            throw new Error(error.message);
+            res.status(400).json({ message: error.message });
         } else {
             const { email, password, name, number, role } = req.body;
             const employee = await employeeService.getEmployeee(email);
