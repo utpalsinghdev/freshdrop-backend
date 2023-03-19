@@ -38,18 +38,18 @@ export const loginEmployee = async (req: Request, res: Response): Promise<void> 
         if (error) {
             throw new Error(error.message);
         } else {
-        const { email, password } = req.body;
-        const token = await employeeService.loginEmployee(email, password);
-        if (token) {
-            res.status(200).json({
-                message: "Employee logged in successfully",
-                data: token,
-            });
-        } else {
-            res.status(401).json({
-                message: "Invalid credentials"
-            });
-        }
+            const { email, password } = req.body;
+            const data = await employeeService.loginEmployee(email, password);
+            if (data) {
+                res.status(200).json({
+                    message: "Employee logged in successfully",
+                    data,
+                });
+            } else {
+                res.status(401).json({
+                    message: "Invalid credentials"
+                });
+            }
         }
     } catch (error) {
         res.status(500).json({

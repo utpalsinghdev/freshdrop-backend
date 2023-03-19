@@ -5,5 +5,4 @@ export default cleanEnv(process.env, {
     PORT: port(),
     DATABASE_URL : str(),
     JWT_SECRET: str(),
-    SERVICE_ACCOUNT_KEY : str(),
 });
