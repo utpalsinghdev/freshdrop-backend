@@ -48,7 +48,9 @@ enum EmployeeRole {
 model Employee {
   Employee_id Int          @id @default(autoincrement())
   name        String
-  number      String       @unique
+  number      String       
+  password    String
+  email       String       @unique
   role        EmployeeRole
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
