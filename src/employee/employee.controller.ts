@@ -237,11 +237,20 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
     try {
 
         const { number } = req.body;
-        const user = await userServices.CreateUser(number);
-        res.status(200).json({
-            message: "User created successfully",
-            user
-        });
+        const user = await userServices.GetUser(number);
+        if (user) {
+            res.status(400).json({
+                message: "User already exists",
+            });
+        } else {
+            const user = await userServices.CreateUser(number);
+
+            res.status(200).json({
+                message: "User created successfully",
+                user
+            });
+
+        }
     } catch (error) {
         res.status(500).json({
             message: error.message
