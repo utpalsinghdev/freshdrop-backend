@@ -60,3 +60,36 @@ export const profile = async (userInput: UserInput) => {
 
     return user
 }
+
+export const getAllUsers = async () => {
+    const users = await prisma.user.findMany({
+        include: {
+            orders: true,
+        } as UserInclude,
+    });
+
+    return users;
+}
+
+export const deleteUser = async (id: number) => {
+    const user = await prisma.user.delete({
+        where: {
+            id,
+        },
+    });
+
+    return user;
+}
+
+export const getUserById = async (id: number) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            orders: true,
+        } as UserInclude,
+    });
+
+    return user;
+}

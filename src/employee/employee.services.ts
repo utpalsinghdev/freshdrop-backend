@@ -3,7 +3,7 @@ import * as EmployeeModal from "./employee.model"
 import { EmployeeInput } from "./employee.model"
 import env from "../utils/validateEnv"
 import * as jwt from 'jsonwebtoken';
-import { EmployeeRole } from "@prisma/client";
+import * as userModal from "../User/user.model"
 export const CreateUser = async ({ email, password, name, number, role }: EmployeeInput) => {
 
 
@@ -55,4 +55,10 @@ export const deleteEmployee = async (id: number) => {
     const employee = await EmployeeModal.deleteEmployee(id);
 
     return employee;
+}
+
+
+export const getAllUsers = async () => {
+    const employees = await userModal.getAllUsers();
+    return employees;
 }

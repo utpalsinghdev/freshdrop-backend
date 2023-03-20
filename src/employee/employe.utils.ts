@@ -47,3 +47,25 @@ export const AdminVerifyToken = (req: AuthenticatedRequest, res: Response, next:
     req.role = data.role;
     next();
 };
+export const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(404).json({ message: 'Authentication failed: Missing token' });
+    }
+
+    const data: JwtPayload | null = verifyJwt(token);
+
+    if (!data) {
+        return res.status(401).json({ message: 'Authentication failed: Invalid token Or Expired' });
+    }
+
+    if (!data.role) {
+        return res.status(403).json({ message: 'Authentication failed: Only Admin can access this route' });
+    }
+
+
+    req.email = data.email
+    req.role = data.role;
+    next();
+};
