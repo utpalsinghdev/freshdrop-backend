@@ -16,16 +16,17 @@ model Otp {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  name        String   @default("customer")
-  number      String   @unique
-  orders      Order[]  @relation("userOrders")
-  bottles     Int?
-  balance     Int      @default(0)
-  address     String?
-  membership Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  name            String   @default("customer")
+  number          String   @unique
+  orders          Order[]  @relation("userOrders")
+  bottles         Int      @default(0)
+  balance         Int      @default(0)
+  perBottleCharge Int      @default(25)
+  address         String?
+  membership      Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 enum OrderType {
@@ -35,7 +36,6 @@ enum OrderType {
 
 enum TimeSlot {
   MORNING
-  AFTERNOON
   EVENING
 }
 
@@ -48,7 +48,7 @@ enum EmployeeRole {
 model Employee {
   Employee_id Int          @id @default(autoincrement())
   name        String
-  number      String       
+  number      String
   password    String
   email       String       @unique
   role        EmployeeRole
@@ -57,19 +57,33 @@ model Employee {
   orders      Order[]      @relation("employeeOrders")
 }
 
+enum OrderStatus {
+  PENDING
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
 model Order {
-  Order_id     Int       @id @default(autoincrement())
-  number       String
-  address      String
-  deliveryDate DateTime
-  quantity     Int
-  deliveryTime TimeSlot
-  type         OrderType @default(SINGLE)
-  status       String    @default("pending")
-  user         User      @relation("userOrders", fields: [userId], references: [id])
-  userId       Int
-  AuthorBy     Employee? @relation("employeeOrders", fields: [AuthorBy_id], references: [Employee_id])
-  AuthorBy_id  Int?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  Order_id         Int           @id @default(autoincrement())
+  number           String
+  address          String
+  deliveryDate     DateTime
+  quantity         Int
+  deliveryTimeSlot TimeSlot
+  deliveryTime     String?
+  orderCost        Int?
+  type             OrderType     @default(SINGLE)
+  Orderstatus      OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(PENDING)
+  user             User          @relation("userOrders", fields: [userId], references: [id])
+  userId           Int
+  AuthorBy         Employee?     @relation("employeeOrders", fields: [AuthorBy_id], references: [Employee_id])
+  AuthorBy_id      Int?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 }

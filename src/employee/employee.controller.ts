@@ -244,7 +244,6 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
             });
         } else {
             const user = await userServices.CreateUser(number);
-
             res.status(200).json({
                 message: "User created successfully",
                 user
