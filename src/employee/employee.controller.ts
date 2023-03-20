@@ -2,7 +2,8 @@ import * as employeeService from './employee.services';
 import { Request, Response } from 'express';
 
 import { EmployeeInput } from './employee.model';
-import { employeeSchema, loginSchema } from './employee.schema';
+import { employeeSchema, loginSchema, updateemployeeSchema } from './employee.schema';
+import { EmployeeRole } from '@prisma/client';
 
 export const CreateEmployee = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -57,3 +58,112 @@ export const loginEmployee = async (req: Request, res: Response): Promise<void> 
         });
     }
 };
+
+export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const employees = await employeeService.getAllEmployees();
+        res.status(200).json({
+            message: "Employees fetched successfully",
+            employees
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+export const getEmployeeById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = parseInt(req.params.id);
+        if (!id) throw new Error("Invalid id missing");
+        const employee = await employeeService.getEmployeeById(id);
+        if (employee) {
+            res.status(200).json({
+                message: "Employee fetched successfully",
+                employee
+            });
+        } else {
+            res.status(404).json({
+                message: "Employee not found"
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+
+export const updateEmployee = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { error } = updateemployeeSchema.validate(req.body);
+        if (error) {
+            throw new Error(error.message);
+        } else {
+            const id = parseInt(req.params.id);
+
+            const { email, name, number, role } = req.body;
+            if (!id) throw new Error("Invalid id missing");
+
+            const employee = await employeeService.getEmployeeById(id);
+            if (employee) {
+                const updatedEmployee = await employeeService.updateEmployee({ id, email, name, number, role });
+                res.status(200).json({
+                    message: "Employee updated successfully",
+                    employee: updatedEmployee
+                });
+            } else {
+                res.status(404).json({
+                    message: "Employee not found"
+                });
+            }
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+interface AuthenticatedRequest extends Request {
+    email: string;
+    role: EmployeeRole;
+}
+
+export const deleteEmployee = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = parseInt(req.params.id);
+        const role = (req as AuthenticatedRequest).role;
+        if (!id) throw new Error("Invalid id missing");
+        const employee = await employeeService.getEmployeeById(id);
+        if (employee) {
+            if (role !== EmployeeRole.SUPERADMIN) {
+                if (employee.role === EmployeeRole.ADMIN && employee.Employee_id === id || employee.role === EmployeeRole.SUPERADMIN) {
+                    throw new Error("Admin can't be deleted");
+                } else {
+                    const deletedEmployee = await employeeService.deleteEmployee(id);
+                    res.status(200).json({
+                        message: "Employee deleted successfully",
+                        employee: deletedEmployee
+                    });
+                }
+            } else {
+                const deletedEmployee = await employeeService.deleteEmployee(id);
+                res.status(200).json({
+                    message: "Employee deleted successfully",
+                    employee: deletedEmployee
+                });
+            }
+
+        } else {
+            res.status(404).json({
+                message: "Employee not found"
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}

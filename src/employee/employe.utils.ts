@@ -23,7 +23,7 @@ interface AuthenticatedRequest extends Request {
 }
 
 
-export const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const AdminVerifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
     if (!token) {
@@ -34,6 +34,10 @@ export const verifyToken = (req: AuthenticatedRequest, res: Response, next: Next
 
     if (!data) {
         return res.status(401).json({ message: 'Authentication failed: Invalid token Or Expired' });
+    }
+
+    if (!data.role) {
+        return res.status(403).json({ message: 'Authentication failed: Only Admin can access this route' });
     }
 
     if (data.role == EmployeeRole.DELIVERY) {

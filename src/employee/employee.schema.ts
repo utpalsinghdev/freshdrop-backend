@@ -5,6 +5,11 @@ export const employeeSchema = Joi.object({
     password: Joi.string().min(8).required(),
     name: Joi.string().required(),
     number: Joi.string().pattern(/^[0-9]+$/).required(),
+    role: Joi.string().valid('ADMIN', 'DELIVERY', 'SUPERADMIN').required(),
+});
+export const updateemployeeSchema = Joi.object({
+    name: Joi.string().required(),
+    number: Joi.string().pattern(/^[0-9]+$/).required(),
     role: Joi.string().valid('ADMIN', 'DELIVERY').required(),
 });
 
