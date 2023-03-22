@@ -7,26 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Otp {
-  id        Int      @id @default(autoincrement())
-  number    String   @unique
-  otp       String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum OrderStatus {
+  PENDING
+  DELIVERED
+  CANCELLED
 }
 
-model User {
-  id              Int      @id @default(autoincrement())
-  name            String   @default("customer")
-  number          String   @unique
-  orders          Order[]  @relation("userOrders")
-  bottles         Int      @default(0)
-  balance         Int      @default(0)
-  perBottleCharge Int      @default(25)
-  address         String?
-  membership      Json?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+enum PaymentStatus {
+  PENDING
+  PAID
 }
 
 enum OrderType {
@@ -45,6 +34,39 @@ enum EmployeeRole {
   SUPERADMIN
 }
 
+model Otp {
+  id        Int      @id @default(autoincrement())
+  number    String   @unique
+  otp       String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id              Int         @id @default(autoincrement())
+  name            String      @default("customer")
+  number          String      @unique
+  orders          Order[]     @relation("userOrders")
+  bottles         Int         @default(0)
+  balance         Int         @default(0)
+  perBottleCharge Int         @default(25)
+  address         String?
+  membership      Membership?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Membership {
+  id        Int      @id @default(autoincrement())
+  name      String
+  startDate DateTime
+  duration  Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Employee {
   Employee_id Int          @id @default(autoincrement())
   name        String
@@ -57,17 +79,6 @@ model Employee {
   orders      Order[]      @relation("employeeOrders")
 }
 
-enum OrderStatus {
-  PENDING
-  DELIVERED
-  CANCELLED
-}
-
-enum PaymentStatus {
-  PENDING
-  PAID
-}
-
 model Order {
   Order_id         Int           @id @default(autoincrement())
   number           String
@@ -75,7 +86,7 @@ model Order {
   deliveryDate     DateTime
   quantity         Int
   deliveryTimeSlot TimeSlot
-  deliveryTime     String?
+  deliveryTime     DateTime?
   orderCost        Int?
   type             OrderType     @default(SINGLE)
   Orderstatus      OrderStatus   @default(PENDING)
