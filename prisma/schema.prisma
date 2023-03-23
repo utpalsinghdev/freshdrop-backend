@@ -46,6 +46,7 @@ model User {
   id              Int         @id @default(autoincrement())
   name            String      @default("customer")
   number          String      @unique
+  altNumber       String?
   orders          Order[]     @relation("userOrders")
   bottles         Int         @default(0)
   balance         Int         @default(0)
@@ -68,15 +69,16 @@ model Membership {
 }
 
 model Employee {
-  Employee_id Int          @id @default(autoincrement())
+  Employee_id Int    @id @default(autoincrement())
   name        String
   number      String
-  password    String
-  email       String       @unique
-  role        EmployeeRole
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  orders      Order[]      @relation("employeeOrders")
+
+  password  String
+  email     String       @unique
+  role      EmployeeRole
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  orders    Order[]      @relation("employeeOrders")
 }
 
 model Order {

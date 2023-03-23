@@ -9,7 +9,8 @@ import {
     getEmployeeById,
     getUserById,
     loginEmployee,
-    updateEmployee
+    updateEmployee,
+    updateUser
 } from "./employee.controller";
 import { AdminVerifyToken, verifyToken } from "./employe.utils";
 const router = Router();
@@ -22,7 +23,7 @@ router.get('/:id', AdminVerifyToken, getEmployeeById)
 router.delete('/:id', AdminVerifyToken, deleteEmployee)
 router.delete('/user/:id', AdminVerifyToken, deleteUser)
 router.post('/user/add', AdminVerifyToken, createUser)
-
+router.put('/user/update/:id', AdminVerifyToken, updateUser)
 
 // Routes for all deliveryBoy and admin
 router.post('/login', loginEmployee)

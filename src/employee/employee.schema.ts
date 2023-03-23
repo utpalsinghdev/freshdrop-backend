@@ -18,3 +18,20 @@ export const loginSchema = Joi.object({
     password: Joi.string().min(8).required(),
 });
 
+export const createSchema = Joi.object({
+    number: Joi.string().pattern(/^[0-9]+$/).required(),
+    altNumber: Joi.string().pattern(/^[0-9]+$/).optional(),
+    name: Joi.string().required(),
+    address: Joi.string().required(),
+    bottles: Joi.number().integer().min(0).required(),
+    balance: Joi.number().min(0).required(),
+    perBottleCharge: Joi.number().integer().min(1).required()
+});
+export const updateuserSchema = Joi.object({
+    altNumber: Joi.string().pattern(/^[0-9]+$/).optional(),
+    name: Joi.string().required(),
+    address: Joi.string().required(),
+    bottles: Joi.number().integer().min(0).required(),
+    balance: Joi.number().min(0).required(),
+    perBottleCharge: Joi.number().integer().min(1).required()
+});

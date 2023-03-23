@@ -9,6 +9,15 @@ export const CreateUser = async (number: string) => {
     const user = await userModel.CreateUser(number);
     return user;
 }
+export const CreateUserAdmin = async (payload : any) => {
+    const user = await userModel.CreateUserByAdmin(payload);
+    return user;
+}
+
+export const UpdateUser = async (payload : any, id : number) => {
+    const user = await userModel.updateUser(payload, id);
+    return user;
+}
 
 export const GetProfile = async (number: string) => {
     const user = await userModel.getProfile(number);

@@ -2,7 +2,7 @@ import * as employeeService from './employee.services';
 import { Request, Response } from 'express';
 import * as userServices from '../User/user.services'
 import { EmployeeInput } from './employee.model';
-import { employeeSchema, loginSchema, updateemployeeSchema } from './employee.schema';
+import { createSchema, employeeSchema, loginSchema, updateemployeeSchema, updateuserSchema } from './employee.schema';
 import { EmployeeRole } from '@prisma/client';
 
 export const CreateEmployee = async (req: Request, res: Response): Promise<void> => {
@@ -236,19 +236,25 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
     try {
 
-        const { number } = req.body;
-        const user = await userServices.GetUser(number);
-        if (user) {
-            res.status(400).json({
-                message: "User already exists",
-            });
-        } else {
-            const user = await userServices.CreateUser(number);
-            res.status(200).json({
-                message: "User created successfully",
-                user
-            });
+        const { error } = createSchema.validate(req.body);
+        if (error) {
+            throw new Error(error.message);
 
+        } else {
+
+            const user = await userServices.GetUser(req.body.number);
+            if (user) {
+                res.status(400).json({
+                    message: "User already exists",
+                });
+            } else {
+                const user = await userServices.CreateUserAdmin(req.body);
+                res.status(200).json({
+                    message: "User created successfully",
+                    user
+                });
+
+            }
         }
     } catch (error) {
         res.status(500).json({
@@ -256,3 +262,36 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
         });
     }
 }
+
+
+export const updateUser = async (req: Request, res: Response): Promise<void | Response<any, Record<string, any>>> => {
+    try {
+        const { id } = req.params;
+        const { body } = req;
+
+        const { error } = updateuserSchema.validate(body);
+
+        if (error) {
+            return res.status(400).json({ message: error.message });
+        }
+
+        if (!id) {
+            return res.status(400).json({ message: "Invalid id missing" });
+        }
+
+        const user = await userServices.getUserById(parseInt(id));
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const updatedUser = await userServices.UpdateUser(body, parseInt(id));
+
+        res.status(200).json({
+            message: "User updated successfully",
+            user: updatedUser
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

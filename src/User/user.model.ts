@@ -11,6 +11,23 @@ export const CreateUser = async (number: string) => {
     });
     return user;
 }
+export const CreateUserByAdmin = async (payload: any) => {
+    const user = await prisma.user.create({
+        data:
+            payload,
+
+    });
+    return user;
+}
+export const updateUser = async (payload: any, id: number) => {
+    const user = await prisma.user.update({
+        where: {
+            id: id,
+        },
+        data: payload,
+    });
+    return user;
+}
 
 export const checkUser = async (number: string) => {
     const user = await prisma.user.findUnique({
