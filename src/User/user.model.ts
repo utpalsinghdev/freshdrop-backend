@@ -59,7 +59,6 @@ export const getProfile = async (number: string) => {
             orders: true,
         } as UserInclude,
     });
-
     return user;
 };
 
