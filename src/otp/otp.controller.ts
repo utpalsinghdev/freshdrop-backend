@@ -1,11 +1,16 @@
 import { Request, Response } from 'express';
 import { generateOtp, verifyOtp } from './otp.services';
-import { otpSchema } from './otp.schema';
+import { otpSchema, reqOtpSchema } from './otp.schema';
 import { CreateUser, GetUser } from '../User/user.services';
 export const generateOtpController = async (req: Request, res: Response) => {
 
     try {
         const InputBody = req.body;
+        const { error } = reqOtpSchema.validate(InputBody);
+        if (error) {
+            throw new Error(error.message);
+        }
+
         const otpData = await generateOtp(InputBody.number);
         res.status(201).json({ message: 'OTP generated successfully', otpData });
     } catch (error) {

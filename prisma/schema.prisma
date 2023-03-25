@@ -72,7 +72,6 @@ model Employee {
   Employee_id Int    @id @default(autoincrement())
   name        String
   number      String
-
   password  String
   email     String       @unique
   role      EmployeeRole

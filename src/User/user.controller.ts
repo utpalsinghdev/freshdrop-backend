@@ -25,6 +25,7 @@ interface User {
     name: string;
     address: string;
     number: string;
+    altNumber: string;
 }
 
 export const updateDetailsController = async (req: AuthenticatedRequest, res: Response) => {
@@ -37,7 +38,8 @@ export const updateDetailsController = async (req: AuthenticatedRequest, res: Re
         const userInput: User = {
             name: req.body.name,
             address: req.body.address,
-            number
+            number,
+            altNumber: req.body.altNumber
         }
         const user = await Profile(userInput);
         res.status(200).json({ message: 'Profile Updated successfully', user });

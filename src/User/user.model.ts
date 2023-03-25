@@ -43,6 +43,7 @@ interface UserInput {
     number: string;
     name: string;
     address: string;
+    altNumber?: string;
 }
 interface UserInclude {
     orders?: boolean | Record<string, any>;
@@ -63,7 +64,7 @@ export const getProfile = async (number: string) => {
 };
 
 export const profile = async (userInput: UserInput) => {
-    const { number, name, address } = userInput
+    const { number, name, address, altNumber } = userInput
     const user = await prisma.user.update({
         where: {
             number,
@@ -71,6 +72,7 @@ export const profile = async (userInput: UserInput) => {
         data: {
             name,
             address,
+            altNumber
         },
     })
 
