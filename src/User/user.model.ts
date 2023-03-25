@@ -47,6 +47,7 @@ interface UserInput {
 }
 interface UserInclude {
     orders?: boolean | Record<string, any>;
+    Group?: boolean | Record<string, any>;
 }
 
 
@@ -83,6 +84,7 @@ export const getAllUsers = async () => {
     const users = await prisma.user.findMany({
         include: {
             orders: true,
+            Group: true,
         } as UserInclude,
     });
 
