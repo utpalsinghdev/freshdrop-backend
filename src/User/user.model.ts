@@ -106,6 +106,7 @@ export const getUserById = async (id: number) => {
         },
         include: {
             orders: true,
+            Group: true,
         } as UserInclude,
     });
 

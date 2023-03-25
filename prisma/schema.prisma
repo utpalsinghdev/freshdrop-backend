@@ -55,6 +55,8 @@ model User {
   membership      Membership?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+  Group           Group?      @relation(fields: [groupId], references: [id])
+  groupId         Int?
 }
 
 model Membership {
@@ -68,16 +70,23 @@ model Membership {
   updatedAt DateTime @updatedAt
 }
 
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  users     User[]
+  createdAt DateTime @default(now())
+}
+
 model Employee {
-  Employee_id Int    @id @default(autoincrement())
+  Employee_id Int          @id @default(autoincrement())
   name        String
   number      String
-  password  String
-  email     String       @unique
-  role      EmployeeRole
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  orders    Order[]      @relation("employeeOrders")
+  password    String
+  email       String       @unique
+  role        EmployeeRole
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  orders      Order[]      @relation("employeeOrders")
 }
 
 model Order {

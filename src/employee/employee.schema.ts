@@ -25,13 +25,16 @@ export const createSchema = Joi.object({
     address: Joi.string().required(),
     bottles: Joi.number().integer().min(0).required(),
     balance: Joi.number().min(0).required(),
-    perBottleCharge: Joi.number().integer().min(1).required()
+    perBottleCharge: Joi.number().integer().min(1).required(),
+    groupId: Joi.number().integer().min(1).optional()
 });
 export const updateuserSchema = Joi.object({
     altNumber: Joi.string().pattern(/^[0-9]+$/).optional(),
-    name: Joi.string().required(),
-    address: Joi.string().required(),
-    bottles: Joi.number().integer().min(0).required(),
-    balance: Joi.number().min(0).required(),
-    perBottleCharge: Joi.number().integer().min(1).required()
+    name: Joi.string().optional(),
+    address: Joi.string().optional(),
+    bottles: Joi.number().integer().min(0).optional(),
+    balance: Joi.number().min(0).optional(),
+    perBottleCharge: Joi.number().integer().min(1).optional(),
+    groupId: Joi.number().integer().min(1).optional()
+
 });
