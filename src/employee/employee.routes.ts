@@ -22,11 +22,11 @@ router.put('/update/:id', AdminVerifyToken, updateEmployee)
 router.get('/:id', AdminVerifyToken, getEmployeeById)
 router.delete('/:id', AdminVerifyToken, deleteEmployee)
 router.delete('/user/:id', AdminVerifyToken, deleteUser)
-router.post('/user/add', AdminVerifyToken, createUser)
 router.put('/user/update/:id', AdminVerifyToken, updateUser)
 
 // Routes for all deliveryBoy and admin
 router.post('/login', loginEmployee)
+router.post('/user/add', verifyToken, createUser)
 router.get('/all/users', verifyToken, getAllUsers)
 router.get('/all/user/:id', verifyToken, getUserById)
 
